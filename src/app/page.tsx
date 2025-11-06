@@ -1,13 +1,18 @@
-import Image from "next/image";
-import {Button} from "@/components/ui/button";
+"use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
 
 export default function Home() {
-  return (
-      <div className="min-h-screen min-w-screen flex items-center justify-center">
-          <Button>
-              click me bro!!
-          </Button>
-      </div>
-  );
+    const trpc = useTRPC();
+    const { data: users } = useQuery(trpc.hello.queryOptions({ text: "bro" }));
+
+    console.log('data:', users);
+
+    return (
+        <div className="min-h-screen min-w-screen flex items-center justify-center">
+            {JSON.stringify(users)}
+        </div>
+    );
 }
+
