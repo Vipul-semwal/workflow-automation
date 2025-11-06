@@ -1,11 +1,11 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient, trpc } from '~/trpc/server';
-import { ClientGreeting } from './client-greeting';
+import { getQueryClient, trpc } from '@/trpc/server';
+import { ClientGreeting } from './client';
 export default async function Home() {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(
     trpc.hello.queryOptions({
-      /** input */
+    text:"bro"
     }),
   );
   return (
