@@ -1,11 +1,12 @@
-const page = ()=>{
+import { LoginForm } from "@/features/auth/components/login-from";
+const Page = ()=>{
     return (
         <div>
-         login
+         <LoginFrom/>
         </div>
     )
 };
 
 
-export default page;
+export default Page;
 
