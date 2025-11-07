@@ -27,7 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-// ✅ Schema
+// Γ£à Schema
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
   password: z.string().min(8, "Password is required"),
@@ -35,17 +35,17 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export function LoginForm() {
+export function RegisterForm() {
   const router = useRouter();
 
-  // ✅ Keep full form object
+  // Γ£à Keep full form object
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
     mode: "onSubmit",
   });
 
-  // ✅ Just grab isSubmitting separately
+  // Γ£à Just grab isSubmitting separately
   const isSubmitting = form.formState.isSubmitting;
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -62,7 +62,7 @@ export function LoginForm() {
         </CardHeader>
 
         <CardContent>
-          {/* ✅ Pass the full form object */}
+          {/* Γ£à Pass the full form object */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
@@ -129,4 +129,5 @@ export function LoginForm() {
     </div>
   );
 }
+
 
