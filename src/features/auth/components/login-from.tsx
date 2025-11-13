@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import {authClient} from "@/lib/auth-client"
 
 // ✅ Schema
 const loginSchema = z.object({
@@ -35,7 +36,7 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export function LoginForm() {
+export  function LoginForm() {
   const router = useRouter();
 
   // ✅ Keep full form object
@@ -49,7 +50,14 @@ export function LoginForm() {
   const isSubmitting = form.formState.isSubmitting;
 
   const onSubmit = async (values: LoginFormValues) => {
-    console.log("values:", values);
+      await authClient.signIn.email({email:values.email,password:values.password,callbackURL:"/"},{
+          onSuccess:()=> { 
+              router.push("/")
+          },
+          onError:(ctx)=>{
+           toast.error(ctx.error.messsage)
+          }
+      })
     toast.success("Form submitted!");
   };
 

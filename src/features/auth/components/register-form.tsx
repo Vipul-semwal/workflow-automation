@@ -26,30 +26,52 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import {authClient} from "@/lib/auth-client";
 
 // Γ£à Schema
-const loginSchema = z.object({
+const registerSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
   password: z.string().min(8, "Password is required"),
-});
+  confirmPassword:z.string()
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
 
   // Γ£à Keep full form object
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: { email: "", password: "",confirmPassword:"" },
     mode: "onSubmit",
   });
 
   // Γ£à Just grab isSubmitting separately
   const isSubmitting = form.formState.isSubmitting;
 
-  const onSubmit = async (values: LoginFormValues) => {
-    console.log("values:", values);
+  const onSubmit = async (values: RegisterFormValues) => {
+    console.log("values coe:", values);
+    const data = await authClient.signUp.email({
+        name:values.email,
+        email:values.email,
+        password:values.password,
+        callbackURL:"/"
+    },
+  {
+    onSuccess:()=>{
+        router.push("/login");
+    },
+    onError:(error)=>{
+        toast.error(error.error.message);
+    }
+
+  }
+  )
+  console.log("data:", data);
     toast.success("Form submitted!");
   };
 
@@ -57,8 +79,8 @@ export function RegisterForm() {
     <div className="flex  flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Login to Continue</CardDescription>
+          <CardTitle>Create Account</CardTitle>
+          <CardDescription> Sign up to Create an account</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -98,7 +120,22 @@ export function RegisterForm() {
   render={({ field }) => {
     return (
       <FormItem>
-        <FormLabel>Email</FormLabel>
+        <FormLabel>Password</FormLabel>
+        <FormControl>
+          <Input type="password" placeholder="********" {...field} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    );
+  }}
+/>
+<FormField
+  control={form.control}
+  name="confirmPassword"
+  render={({ field }) => {
+    return (
+      <FormItem>
+        <FormLabel>Confirm Password</FormLabel>
         <FormControl>
           <Input type="password" placeholder="********" {...field} />
         </FormControl>
@@ -108,16 +145,18 @@ export function RegisterForm() {
   }}
 />
 
+
+
                       <Button type="submit" className="w-full" disabled={isSubmitting}>
-                          Login 
+                          Register 
                     </Button>
                
                 </div>
                   <div className="text-center text-sm">
-                      Don't have an account?
-                      <Link href="/signup"
+                      Already have an account?
+                      <Link href="/login"
                       className="underline underline-offset-4">
-                          Sign Up
+                          Sign In
                     </Link>
 
                 </div>
