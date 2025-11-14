@@ -95,9 +95,25 @@ export function RegisterForm() {
                     type="button"
                     disabled={isSubmitting}
                   >
+ <Image src="/logo/google.svg" width={20} height={20} alt={"google logo"}/>
+
                     Continue with Google
                   </Button>
                 </div>
+
+ <div className="flex flex-col gap-4">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    type="button"
+                    disabled={isSubmitting}
+                  >
+ <Image src="/logo/github.svg" width={20} height={20} alt={"github logo"}/>
+
+                    Continue with Git Hub
+                  </Button>
+                </div>
+
                   <div className="grid gap-6">
                      <FormField
   control={form.control}
