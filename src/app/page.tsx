@@ -10,10 +10,10 @@ import {useTRPC} from "@/trpc/client";
 import {Button} from "@/components/ui/button"
  
  
-export default async  function Home() {
+export default  function Home() {
  const trpc = useTRPC()
     const {data} = useQuery(trpc.getWorkflows.queryOptions());
-    const create = useMutation(trpc.createWorkflow.mutationOptions())
+    const create = useMutation(trpc.createWorkFlow.mutationOptions())
    
 
      
