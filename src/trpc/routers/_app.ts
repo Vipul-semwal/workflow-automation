@@ -1,7 +1,17 @@
 import { z } from 'zod';
 import {inngest} from "@/inngest/client";
 import { proctectedProcedure , baseProcedure, createTRPCRouter } from '../init';
+import { google } from '@ai-sdk/google';
+import { generateText } from 'ai';
+
 export const appRouter = createTRPCRouter({
+    testAi:proctectedProcedure.mutation(async()=>{
+        await inngest.send({
+            name:"excute.ai",
+        })
+
+    return {success:true, message:"job has been queued!"}
+    }),
   hello:  proctectedProcedure 
     .input(
         z.object({ text: z.string() })
