@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname  } from "next/navigation";
 import {authClient} from "@/lib/auth-client";
+import {useHasActiveSubscriptions } from "@features/subscription/hooks/use-subscriptions";
 
 import {
   Sidebar,
@@ -27,7 +28,7 @@ import {
 
 const menueItems = [
   {
-    title: "Mai",
+    title: "Main",
     items: [
       {
         title: "Workflows",
@@ -107,6 +108,10 @@ export const AppSidebar = () => {
         <SidebarMenu>
         <SidebarMenuItem>
             <SidebarMenuButton tooltip="Upgrade to pro" className="gap-x-4 h-10 px-4" onClick={()=>{
+                authClient.checkout({
+                    slug:"pro",
+
+                })
                
                 }}>
                 <StarIcon className="h-4 w-4" />
