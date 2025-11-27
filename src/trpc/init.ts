@@ -1,6 +1,7 @@
 import { initTRPC,TRPCError } from '@trpc/server';
 import {headers} from "next/headers"
 import { cache } from 'react';
+import {polarClient} from "@/lib/polar";
 import {auth} from "@/lib/auth"
 export const createTRPCContext = cache(async () => {
   /**
@@ -38,3 +39,25 @@ export const  proctectedProcedure = baseProcedure.use(async ({
  return next({ctx:{...ctx, auth:session}})
 
 })
+
+export const premimumProcedure = proctectedProcedure.use(
+    async({ctx,next })=>{
+        const customer = await polarClient.customers.getStateExternal({
+            externalId: ctx.auth.user.id,
+        })
+
+        if(
+            !customer.activeSubscriptions || customer.activeSubscriptions.length === 0
+        ){
+            throw new TRPCError(
+                {
+                    code:"FORBIDDEN",
+                    message:"Active subscription required"
+                }
+            )
+        }
+        
+        return next({ctx:{...ctx,customer}});
+    }
+
+)
